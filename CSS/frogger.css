@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+}
+
+.grid-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.grid {
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  display: table;
+  height: 600px;
+  width: 600px;
+}
+
+.row {
+  display: table-row;
+  width: 100%;
+  height: auto;
+}
+
+.cell {
+  border: 1px solid lightgrey;
+  height: auto;
+  width: auto;
+  display: table-cell;
+}
+
+div.frog {
+background-image: url('../images/frog.png');
+background-repeat: no-repeat;
+background-size: contain;
+cursor: pointer;
+background-color: blue;
+}
+
+.finish {
+  background-color: green;
+}
+
+.start {
+  background-color: red;
+}
+
+.black {
+  background-color: black ;
+}
+
