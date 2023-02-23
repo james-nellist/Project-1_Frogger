@@ -3,21 +3,50 @@
 }
 
 body {
-  height: 100vh;
-  margin: 0;
-}
-
-.grid-wrapper {
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  height: 100%;
 }
+
+header {
+  width: 525px;
+  height: 75px;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 25px 25px;
+}
+
+.startBtn {
+  height: 45px;
+  width: 75px;
+  background-color: rgb(41, 188, 41);
+  color: white;
+}
+
+.resetBtn {
+  height: 45px;
+  width: 75px;
+  background-color: rgb(50, 50, 210);
+  color: white;
+}
+
+.grid-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px lightskyblue;
+}
+
 .grid {
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2); */
   display: table;
   height: 600px;
   width: 600px;
+  background-image: url('../images/trop.gif.crdownload');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .row {
@@ -27,29 +56,69 @@ body {
 }
 
 .cell {
-  border: 1px solid lightgrey;
   height: auto;
   width: auto;
   display: table-cell;
 }
 
+footer {
+  width: 525px;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 25px;
+}
+
+.lives {
+  height: 50px;
+  width: 125px;
+  border: solid 1px lightskyblue;
+  font-size: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.currentScore{
+  height: 50px;
+  width: 160px;
+  font-size: 20px;
+  border: solid 1px lightskyblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 30px;
+}
+
 div.frog {
-background-image: url('../images/frog.png');
-background-repeat: no-repeat;
-background-size: contain;
-cursor: pointer;
-background-color: blue;
+  background-image: url('../images/frog-removebg-preview.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  scale: 1.75;
 }
 
 .finish {
-  background-color: green;
+  background-image: url('../images/giphy.gif');
+  background-repeat: repeat;
+  background-size: contain;
+  cursor: pointer;
+
 }
 
-.start {
-  background-color: red;
+.fly {
+  background-image: url('../images/bug-removebg-preview.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  scale: 0.5;
 }
 
 .black {
-  background-color: black ;
+  background-image: url('../images/snake-removebg-preview.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  scale: 1;
 }
-

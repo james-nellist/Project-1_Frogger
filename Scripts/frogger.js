@@ -1,47 +1,64 @@
-function init(){
+function init() {
   // elements: start button, grid, lives, current score, high score, reset button
+  const startButton = document.querySelector('.startBtn')
+  const resetButton = document.querySelector('.resetBtn')
   const grid = document.querySelector('.grid')
-  const width = 15
+  const lifeCount = document.querySelector('.lives')
+  const currentScore = document.querySelector('.currentScore')
+  const width = 10
   const cellCount = width * width
   const startingPosition = 95
   let currentPosition = startingPosition
   const cells = []
-  const obstacle1 = createObstacle([73,74], 'black', 5000)
-  const obstacle2 = createObstacle([53, 55], 'black', 900)
+  const obstacle1 = createObstacle([73, 74], 'black', 500)
+  const obstacle2 = createObstacle([50, 52, 53, 56, 57, 59], 'black', 500)
+  const obstacle3 = createObstacle([10, 11, 12, 16, 17, 18, 19], 'black', 300)
+  const obstacle4 = createObstacle([20, 21, 22, 26, 27, 28, 29], 'black', 500)
+  const intervals = []
+  const nom = document.querySelector('#nom')
+  const hiss = document.querySelector('#hiss')
+  const aww = document.querySelector('#aww')
+  const win = document.querySelector('#win')
+  const music = document.querySelector('#music')
+
+  let lives = 3
+  let alert
+  let gameStarted = false
+  let score = 5
+
+  lifeCount.innerHTML = '❤️'.repeat(lives)
 
 
-  setInterval(() => {
-    moveObstacle(obstacle2)
-  }, obstacle2.time)
-  setInterval(() => {
-    moveObstacle(obstacle1)
-  }, obstacle1.time)
 
-
-
-  function createGrid(){
+  function createGrid() {
     let row = document.createElement('div')
     row.classList.add('row')
     let rowNumber = 0
-    for (let i = 0; i < cellCount; i++){
+    for (let i = 0; i < cellCount; i++) {
       const cell = document.createElement('div')
       cell.classList.add('cell')
-      cell.innerText = i
+      // cell.innerText = i
       cell.dataset.index = i
-      if (obstacle1.position.includes(i)){
+      if (obstacle1.position.includes(i)) {
         cell.classList.add(obstacle1.color)
       }
-      if (obstacle2.position.includes(i)){
+      if (obstacle2.position.includes(i)) {
         cell.classList.add(obstacle2.color)
+      }
+      if (obstacle3.position.includes(i)) {
+        cell.classList.add(obstacle3.color)
+      }
+      if (obstacle4.position.includes(i)) {
+        cell.classList.add(obstacle4.color)
       }
       cells.push(cell)
       row.appendChild(cell)
-      if (row.childElementCount === width ){
+      if (row.childElementCount === width) {
         row.dataset.index = rowNumber
         row.dataset.testValue = 6
-        if (rowNumber === 0){
+        if (rowNumber === 0) {
           row.classList.add('finish')
-        } else if (rowNumber === width - 1){
+        } else if (rowNumber === width - 1) {
           row.classList.add('start')
         }
         grid.appendChild(row)
@@ -51,73 +68,197 @@ function init(){
       }
     }
     addFrog(startingPosition)
+    addFly()
+    addFly()
+    addFly()
+    addFly()
+    addFly()
   }
 
-  function createObstacle(position, color, time){
+  function begin() {
+    intervals.push(setInterval(() => {
+      moveObstacle(obstacle3)
+    }, obstacle3.time))
+    intervals.push(setInterval(() => {
+      moveObstacle(obstacle2)
+    }, obstacle2.time))
+    intervals.push(setInterval(() => {
+      moveObstacle(obstacle1)
+    }, obstacle1.time))
+    intervals.push(setInterval(() => {
+      moveObstacle(obstacle4)
+    }, obstacle4.time))
+    gameStarted = true
+    score = 5
+    music.src = '../Project-1_Frogger/images/320806__ajubamusic__steel-drums-90bpm-key-of-a.mp3'
+    music.play()
+  }
 
+  function createObstacle(position, color, time) {
     const obstacle = {
       position: position,
       color: color,
       time: time,
     }
-    return obstacle 
+    return obstacle
   }
 
-  function addFrog(position){
+  function addFrog(position) {
     cells[position].classList.add('frog')
   }
 
-  function checkFrog(position){
+  function addFly() {
+    const random = Math.floor(Math.random() * ((width * width) - width)) + width
+    // cells[random].classList.add('fly')
+    if (cells[random].classList.contains('fly')){
+      addFly()
+    } else cells[random].classList.add('fly')
+  }
+
+  function checkFrog(position) {
     const rowPosition = cells[position].parentElement
-    if (rowPosition.dataset.index === '0'){
-      window.alert('woop woop you are the winner!')
+    if (rowPosition.dataset.index === '0') {
+      win.src = '../Project-1_Frogger/images/189795__magixmusic__frogs-forever.mp3'
+      win.play()
+      alert = setTimeout(() => {
+        window.alert('Woop Woop :) You are the winner!')
+        gameStarted = false
+
+        intervals.forEach(interval => {
+          clearInterval(interval)
+        })
+      }, 100)
     }
-    if (cells[position].classList.contains('black')){
-      window.alert('fuck you')
+
+    if (cells[position].classList.contains('black')) {
+      lifeLost()
+    }
+    if (cells[position].classList.contains('fly')){
+      scoreUp()
+      removeFly(position)
     }
   }
 
-  function removeFrog(){
+  function removeFly(position){
+    cells[position].classList.remove('fly')
+  }
+  function clearFly (){
+    cells.forEach(cell => {
+      if (cell.classList.contains('fly')){
+        cell.classList.remove('fly')
+      }
+    })
+  }
+
+
+  function removeFrog() {
     cells[currentPosition].classList.remove('frog')
   }
 
-  function moveFrog(e){
-    console.log(e)
-    const right = 39
-    const left = 37
-    const up = 38
-    const down = 40
-
-    removeFrog()
-
-    if (e.keyCode === right && currentPosition % width !== width - 1){
-      console.log('right')
-      currentPosition++
-    } else if (e.keyCode === left && currentPosition % width !== 0){
-      console.log('left')
-      currentPosition --
-    } else if (e.keyCode === up && currentPosition >= width){
-      console.log('up')
-      currentPosition -= width
-    } else if (e.keyCode === down && currentPosition + width < cellCount){
-      console.log('down')
-      currentPosition += width
-    } else {
-      console.log('Key Invalid')
+  function lifeLost() {
+    lives -= 1
+    if (lives <= 0) {
+      lives = 0
     }
-    console.log(currentPosition % width)
-    addFrog(currentPosition)
-    checkFrog(currentPosition)
+    lifeCount.innerHTML = '❤️'.repeat(lives)
+    if (lives === 0) {
+      brokenHeart()
+      gameOver()
+    }
+    hiss.src = '../Project-1_Frogger/images/447636__crownieyt__his_hissing_cat_snake.wav'
+    hiss.play()
   }
 
-  function moveObstacle(obstacle){
+  function scoreUp(){
+    score -= 1
+    currentScore.innerHTML = '🕷'.repeat(score)
+    nom.src = '../Project-1_Frogger/images/543386__thedragonsspark__nom-noise.wav'
+    nom.play()
+  }
+
+  function gameOver() {
+    alert = setTimeout(() => {
+      if (lifeCount.innerHTML === '💔') {
+        window.alert('Game over :( Hit reset to try again!')
+        gameStarted = false
+      }
+      intervals.forEach(interval => {
+        clearInterval(interval)
+      })
+      gameStarted = false
+    }
+    , 100)
+    aww.src = '../Project-1_Frogger/images/124996__phmiller42__aww.wav'
+    aww.play()
+  }
+
+  function brokenHeart() {
+    lifeCount.innerHTML = '💔'
+  }
+
+  function moveFrog(e) {
+
+    if (gameStarted) {
+
+      console.log(e)
+      const right = 39
+      const left = 37
+      const up = 38
+      const down = 40
+
+
+      removeFrog()
+
+      if (e.keyCode === right && currentPosition % width !== width - 1) {
+        console.log('right')
+        currentPosition++
+      } else if (e.keyCode === left && currentPosition % width !== 0) {
+        console.log('left')
+        currentPosition--
+      } else if (e.keyCode === up && currentPosition >= width) {
+        console.log('up')
+        currentPosition -= width
+      } else if (e.keyCode === down && currentPosition + width < cellCount) {
+        console.log('down')
+        currentPosition += width
+      } else {
+        console.log('Key Invalid')
+      }
+      console.log(currentPosition % width)
+      addFrog(currentPosition)
+      checkFrog(currentPosition)
+    }
+  }
+
+  function reset() {
+    lives = 3
+    lifeCount.innerHTML = '❤️'.repeat(lives)
+    score = 5
+    currentScore.innerHTML = '🕷'.repeat(score)
+    removeFrog()
+    currentPosition = startingPosition
+    addFrog(currentPosition)
+    clearFly()
+    addFly()
+    addFly()
+    addFly()
+    addFly()
+    addFly()
+    win.src = '../Project-1_Frogger/images/189795__magixmusic__frogs-forever.mp3'
+    win.stop()
+  }
+
+  function moveObstacle(obstacle) {
     obstacle.position.forEach((cell) => cells[cell].classList.remove('black'))
     const updated = obstacle.position.map(position => (position + 1) % width === 0 ? position - width + 1 : position + 1)
     obstacle.position = updated
     obstacle.position.forEach((cell) => cells[cell].classList.add('black'))
-    obstacle.position.forEach((cell) => cells[cell].classList.contains('frog') ? window.alert('fuck you') : obstacle)
+    obstacle.position.forEach((cell) => cells[cell].classList.contains('frog') ? lifeLost() : obstacle)
+    // obstacle.position.forEach((cell) => cells[cell].classList.contains('fly') ? removeFly(cell) : obstacle)
   }
 
+  startButton.addEventListener('click', begin)
+  resetButton.addEventListener('click', reset)
   document.addEventListener('keydown', moveFrog)
   createGrid()
 }
