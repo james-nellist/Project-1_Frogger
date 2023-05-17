@@ -10,7 +10,7 @@ function init() {
   const startingPosition = 95
   let currentPosition = startingPosition
   const cells = []
-  const obstacle1 = createObstacle([73, 74], 'black', 500)
+  const obstacle1 = createObstacle([70, 72, 76, 79], 'black', 800)
   const obstacle2 = createObstacle([50, 52, 53, 56, 57, 59], 'black', 500)
   const obstacle3 = createObstacle([10, 11, 12, 16, 17, 18, 19], 'black', 300)
   const obstacle4 = createObstacle([20, 21, 22, 26, 27, 28, 29], 'black', 500)
